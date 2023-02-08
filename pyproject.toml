@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "sl-parser"
+version = "0.1.0"
+description = ""
+authors = ["Augusto Zanellato <augusto.zanellato@gmail.com>"]
+readme = "README.md"
+packages = [{include = "sl_parser"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pydantic-computed = "^0.1.2"
+pydantic = "^1.10.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
