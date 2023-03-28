@@ -24,8 +24,8 @@ class LogEntry(BaseModel):
             'datetime': lambda v: v.timedelta_isoformat(),
         }
 
-    @computed('unit_subunit_id')
-    def __calculate_unit_subunit_id(unit: int, subunit: int):  # type: ignore
+    @computed('unit_subunit_id')  # type: ignore
+    def __calculate_unit_subunit_id(unit: int, subunit: int, **kwargs):  # type: ignore
         return (unit << 4) | subunit 
     
     @classmethod
@@ -35,6 +35,7 @@ class LogEntry(BaseModel):
             timestamp=timestamp,
             unit=int(csv_row[2]),
             subunit=int(csv_row[3]),
+            unit_subunit_id=-1,  # workaround for pydantic validation error if constructor is called without unit_subunit_id
             ini_filename=units_subunits[int(csv_row[2])].subunits[int(csv_row[3])],
             code=csv_row[4],
             description=csv_row[5],
