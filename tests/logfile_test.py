@@ -1,11 +1,12 @@
 from datetime import datetime
-from sl_parser.logfile import LogFile
-from pydantic import ValidationError
+
 import pytest
+
+from sl_parser.logfile import LogFile
 
 
 @pytest.fixture
-def sample_log():
+def sample_log() -> list[str]:
     return (
         "PC DateTime: 25.02.2022 14:23:21\n"
         "UPS DateTime: 25.02.2022 14:23:20\n"
@@ -25,22 +26,27 @@ def sample_log():
         "25/02/2022 ; 14:23:04.457 ; 1 ; 0 ; code5 ; [-] ; Service Mode On ; [-] ; 0 ; 0xFFADFF2F\n"
         "25/02/2022 ; 14:22:45.258 ; 1 ; 0 ; code4 ; In Service mode ; OFF ; BIN ; 0 ; 0xFFE0FFFF\n"
         "25/02/2022 ; 14:22:45.158 ; 1 ; 0 ; code5 ; [-] ; Service Mode OFF ; [-] ; 0 ; 0xFFADFF2F\n"
-        "25/02/2022 ; 14:22:40.558 ; 1 ; 0 ; code5 ; [-] ; Maintenance Restart From Alert Limit ; [-] ; 0 ; 0xFFADFF2F\n"
+        "25/02/2022 ; 14:22:40.558 ; 1 ; 0 ; code5 ; [-] ; lol ; [-] ; 0 ; 0xFFADFF2F\n"
         "25/02/2022 ; 14:22:22.259 ; 1 ; 0 ; code6 ; Reset History Log ; ON ; BIN ; 0 ; 0xFFD3D3D3\n"
     )
 
 
-def test_parse_log(sample_log):
+def test_parse_log(sample_log: list[str]) -> None:
     filename = "test_log.log"
     log_file = LogFile.parse_log(filename, sample_log)
     assert log_file.filename == filename
     assert log_file.pc_datetime == datetime(2022, 2, 25, 14, 23, 21)
     assert log_file.ups_datetime == datetime(2022, 2, 25, 14, 23, 20)
-    assert len(log_file.units_subunits) == 2
+    assert len(log_file.units_subunits) == 2  # noqa: PLR2004
     assert log_file.units_subunits[0].ini_file == "unit.ini"
-    assert log_file.units_subunits[0].subunits == {0: 'unit.ini'}
+    assert log_file.units_subunits[0].subunits == {0: "unit.ini"}
     assert log_file.units_subunits[1].ini_file == "unit.ini"
-    assert log_file.units_subunits[1].subunits == {0: 'unit.ini', 1: 'module.ini',
-                                                   2: 'module.ini', 3: 'module.ini', 14: 'bypass.ini'}
+    assert log_file.units_subunits[1].subunits == {
+        0: "unit.ini",
+        1: "module.ini",
+        2: "module.ini",
+        3: "module.ini",
+        14: "bypass.ini",
+    }
 
-    assert len(log_file.log_entries) == 11
+    assert len(log_file.log_entries) == 11  # noqa: PLR2004

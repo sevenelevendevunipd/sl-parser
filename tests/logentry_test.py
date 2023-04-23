@@ -1,8 +1,9 @@
-from sl_parser import LogEntry, Unit
 from datetime import datetime
 
+from sl_parser import LogEntry, Unit
 
-def test_parse_from_csv_row():
+
+def test_parse_from_csv_row() -> None:
     csv_row = ["25/02/2022", "14:23:17.075", "3", "5", "code", "description", "0x0000", "Hex", "0", "0xFFADFF2F"]
 
     units_subunits = {
