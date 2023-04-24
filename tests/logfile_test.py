@@ -6,7 +6,7 @@ from sl_parser.logfile import LogFile
 
 
 @pytest.fixture
-def sample_log() -> list[str]:
+def sample_log() -> str:
     return (
         "PC DateTime: 25.02.2022 14:23:21\n"
         "UPS DateTime: 25.02.2022 14:23:20\n"
@@ -31,7 +31,7 @@ def sample_log() -> list[str]:
     )
 
 
-def test_parse_log(sample_log: list[str]) -> None:
+def test_parse_log(sample_log: str) -> None:
     filename = "test_log.log"
     log_file = LogFile.parse_log(filename, sample_log)
     assert log_file.filename == filename
